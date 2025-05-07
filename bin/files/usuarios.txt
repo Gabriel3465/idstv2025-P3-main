@@ -1,2 +1,2 @@
-Pedro,Castillo,pedro@gmail.com,12345
-Martin,Ojeda,martin@gmail.com,12345
+Juan,Perez,perez@empresa,12345,Tecnología
+Maria,Garcia,maria@correo,45678,Salud

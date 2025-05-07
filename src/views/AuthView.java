@@ -4,6 +4,10 @@ import javax.swing.JTextField;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -14,6 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -49,7 +54,6 @@ public class AuthView {
 		panelIzquierdo.setLayout(null);
 
 		// imagen de logo
-
 		ImageIcon fondoLogo = new ImageIcon(getClass().getResource("/images/logo.png"));
 		Image imagenEscalada3 = fondoLogo.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 		JLabel fondoLabel3 = new JLabel(new ImageIcon(imagenEscalada3));
@@ -78,7 +82,7 @@ public class AuthView {
 		panelIzquierdo.add(etiqueta1);
 
 		// Campos de usuario y contraseña
-		JLabel etiqueta2 = new JLabel("Ingrese su usuario");
+		JLabel etiqueta2 = new JLabel("Ingrese su correo");
 		etiqueta2.setForeground(Color.WHITE);
 		etiqueta2.setFont(new Font("Bahnschrift", Font.BOLD, 15));
 		etiqueta2.setBounds(120, 120, 200, 40);
@@ -96,7 +100,7 @@ public class AuthView {
 		panelIzquierdo.add(etiqueta3);
 
 		JPasswordField password = new JPasswordField();
-		password.setFont(new Font("Bahnschrift", Font.PLAIN, 20));
+		password.setFont(new Font("Bahnschrift", Font.PLAIN, 35));
 		password.setBounds(160, 260, 200, 40);
 		panelIzquierdo.add(password);
 
@@ -135,11 +139,16 @@ public class AuthView {
 					if (isLogin) {
 						JOptionPane.showMessageDialog(null, "Inicio de secion exitoso", "Hello",
 								JOptionPane.DEFAULT_OPTION);
+					} else {
+						email.setBorder(BorderFactory.createLineBorder(Color.red, 4));
+						password.setBorder(BorderFactory.createLineBorder(Color.red, 4));
+
+						JOptionPane.showMessageDialog(null, "INICIO DE SECION ERRONEO", "Fallido",
+								JOptionPane.CANCEL_OPTION);
 					}
 
-				} else
-					JOptionPane.showMessageDialog(null, "INICIO DE SECION ERRONEO", "Fallido",
-							JOptionPane.CANCEL_OPTION);
+				}
+
 			}
 		});
 		panelIzquierdo.add(botonAcceder);
@@ -191,198 +200,186 @@ public class AuthView {
 	}
 
 	public void register() {
+		JFrame registerFrame = new JFrame("Registro");
+		registerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		registerFrame.setSize(500, 800);
+		registerFrame.setLocationRelativeTo(null);
 
-		JFrame frame = new JFrame("Registro");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(500, 800);
-		frame.setLocationRelativeTo(null);
+		JPanel registerPanel = new JPanel();
+		registerPanel.setBackground(Color.decode("#DCC8A0"));
+		registerPanel.setLayout(null);
 
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		setSize(500, 800);
-//		setLocationRelativeTo(null);
+		// texto
+		JLabel titleLabel = new JLabel("Registro");
+		titleLabel.setFont(new Font("Bahnschrift", Font.BOLD, 20));
+		titleLabel.setBounds(140, 20, 200, 40);
+		titleLabel.setHorizontalAlignment(JLabel.CENTER);
+		registerPanel.add(titleLabel);
 
-		JPanel registro = new JPanel();
-		registro.setBackground(Color.decode("#DCC8A0"));
-		registro.setOpaque(true);
-		registro.setSize(500, 800);
-		registro.setLocation(0, 0);
-		registro.setLayout(null);// quita todo el molde
+		JLabel nameLabel = new JLabel("Ingrese su nombre:");
+		nameLabel.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		nameLabel.setBounds(140, 79, 200, 40);
+		registerPanel.add(nameLabel);
 
-		JLabel etiqueta1R = new JLabel("Registro");
-		etiqueta1R.setSize(200, 40);
-		etiqueta1R.setLocation(140, 20);
-		etiqueta1R.setHorizontalAlignment(JLabel.CENTER);
-		etiqueta1R.setFont(new Font("Bahnschrift", Font.BOLD, 20));
-		registro.add(etiqueta1R);
+		JTextField nameField = new JTextField();
+		nameField.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		nameField.setBounds(109, 113, 249, 40);
+		registerPanel.add(nameField);
 
-		JLabel etiqueta2 = new JLabel("Ingrese su nombre: ");
-		etiqueta2.setSize(200, 40);
-		etiqueta2.setLocation(140, 79);
-		etiqueta2.setFont(new Font("Bahnschrift", Font.BOLD, 15));
-		registro.add(etiqueta2);
+		JLabel lastNameLabel = new JLabel("Ingrese su apellidos:");
+		lastNameLabel.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		lastNameLabel.setBounds(140, 151, 200, 40);
+		registerPanel.add(lastNameLabel);
 
-		JTextField email = new JTextField();
-		email.setSize(249, 40);
-		email.setLocation(109, 113);
-		email.setFont(new Font("Bahnschrift", Font.BOLD, 15));
-		registro.add(email);
+		JTextField lastNameField = new JTextField();
+		lastNameField.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		lastNameField.setBounds(109, 187, 249, 40);
+		registerPanel.add(lastNameField);
 
-		JLabel etiqueta3 = new JLabel("Ingrese su apellidos:");
-		etiqueta3.setSize(200, 40);
-		etiqueta3.setLocation(140, 151);
-		etiqueta3.setFont(new Font("Bahnschrift", Font.BOLD, 15));
-		registro.add(etiqueta3);
+		JLabel companyLabel = new JLabel("Ingrese la empresa:");
+		companyLabel.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		companyLabel.setBounds(140, 226, 200, 40);
+		registerPanel.add(companyLabel);
 
-		JButton volver = new JButton("Volver");
-		volver.setSize(75, 40);
-		volver.setLocation(20, 20);
-		volver.setFont(new Font("Bahnschrift", Font.BOLD, 10));
-		registro.add(volver);
+		JTextField companyField = new JTextField();
+		companyField.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		companyField.setBounds(109, 262, 249, 40);
+		registerPanel.add(companyField);
 
-		ButtonGroup grupo = new ButtonGroup();
+		JLabel sectorLabel = new JLabel("Seleccione el sector:");
+		sectorLabel.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		sectorLabel.setBounds(140, 323, 200, 40);
+		registerPanel.add(sectorLabel);
 
-		JButton botonAcceder = new JButton("Acceder");
-		botonAcceder.setSize(120, 40);
-		botonAcceder.setLocation(185, 689);
-		botonAcceder.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		JComboBox<String> sectorCombo = new JComboBox<>();
+		sectorCombo.setBounds(140, 360, 200, 25);
+		sectorCombo.setFont(new Font("Bahnschrift", Font.PLAIN, 12));
+		sectorCombo.addItem("Seleccione una opción");
+		sectorCombo.addItem("Tecnología");
+		sectorCombo.addItem("Salud");
+		sectorCombo.addItem("Educación");
+		sectorCombo.addItem("Comercio");
+		sectorCombo.addItem("Otro");
+		registerPanel.add(sectorCombo);
 
-		botonAcceder.addActionListener(new ActionListener() {
+		JLabel passwordLabel = new JLabel("Ingrese la contraseña:");
+		passwordLabel.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		passwordLabel.setBounds(140, 395, 200, 40);
+		registerPanel.add(passwordLabel);
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		JPasswordField passwordField = new JPasswordField();
+		passwordField.setFont(new Font("Bahnschrift", Font.PLAIN, 35));
+		passwordField.setBounds(116, 436, 242, 40);
+		registerPanel.add(passwordField);
 
-				Boolean bandera1 = false, bandera2 = false;
+		JLabel confirmPasswordLabel = new JLabel("Repita la contraseña:");
+		confirmPasswordLabel.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		confirmPasswordLabel.setBounds(140, 486, 200, 40);
+		registerPanel.add(confirmPasswordLabel);
 
-				if (email.getText().equals("")) {
-					email.setBorder(BorderFactory.createLineBorder(Color.red, 4));
+		JPasswordField confirmPasswordField = new JPasswordField();
+		confirmPasswordField.setFont(new Font("Bahnschrift", Font.PLAIN, 35));
+		confirmPasswordField.setBounds(116, 525, 242, 40);
+		registerPanel.add(confirmPasswordField);
+
+		JLabel emailLabel = new JLabel("Ingrese su correo:");
+		emailLabel.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		emailLabel.setBounds(140, 567, 200, 40);
+		registerPanel.add(emailLabel);
+
+		JTextField emailField = new JTextField();
+		emailField.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		emailField.setBounds(109, 610, 249, 40);
+		registerPanel.add(emailField);
+
+		// Botones
+		JButton backButton = new JButton("Volver");
+		backButton.setBounds(20, 20, 75, 40);
+		backButton.setFont(new Font("Bahnschrift", Font.BOLD, 10));
+		backButton.addActionListener(e -> {
+			registerFrame.dispose();
+			login();
+		});
+		registerPanel.add(backButton);
+
+		JButton registerButton = new JButton("Registrar");
+		registerButton.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		registerButton.setBounds(185, 689, 120, 40);
+		registerButton.addActionListener(e -> {
+
+			// pasamos todos los field a string
+			String name = nameField.getText();
+			String lastName = lastNameField.getText();
+			String email = emailField.getText();
+			String password = new String(passwordField.getPassword());
+			String confirmPassword = new String(confirmPasswordField.getPassword());
+			String company = companyField.getText();
+			String sector = (String) sectorCombo.getSelectedItem();
+
+			// creamos un array con todos los field
+			JTextField[] fields = { nameField, lastNameField, companyField, passwordField, confirmPasswordField,
+					emailField };
+
+			// repasamos todos los field y confirmamos que seleccione una copcion
+			for (int i = 0; i < fields.length; i++) {
+
+				// confirmamos que no este nada vacio
+				if (fields[i].getText().isEmpty()) {
+					fields[i].setBorder(BorderFactory.createLineBorder(Color.red, 4));
+					JOptionPane.showMessageDialog(null, "NINGUN ESPACION PUEDE QUEDAR VACIO", "Fallido",
+							JOptionPane.CANCEL_OPTION);
+					return;
 				} else {
-					email.setBorder(BorderFactory.createLineBorder(Color.green, 4));
-					bandera1 = true;
+					// restablesemos los bordes a defaul
+					fields[i].setBorder(BorderFactory.createLineBorder(Color.gray, 1));
 				}
 
-//				String contraseña = new String(password.getPassword());
-//
-//				if (contraseña.equals("")) {
-//
-//					password.setBorder(BorderFactory.createLineBorder(Color.red, 4));
-//
-//				} else {
-//					password.setBorder(BorderFactory.createLineBorder(Color.green, 4));
-//					bandera2 = true;
-//				}
-//
-//				if (comentario1.getText().equals("")) {
-//					comentario1.setBorder(BorderFactory.createLineBorder(Color.red, 4));
-//				} else {
-//					comentario1.setBorder(BorderFactory.createLineBorder(Color.green, 4));
-//				}
-
-//				if (bandera1 && bandera2) {
-//					if (email.getText().equals("gabriel@alu")) {
-//						if (contraseña.equals("12345")) {
-//							JOptionPane.showMessageDialog(null, "Inicio de secion exitoso", "Hello",
-//									JOptionPane.DEFAULT_OPTION);
-//						} else
-//							JOptionPane.showMessageDialog(null, "INICIO DE SECION ERRONEO", "Fallido",
-//									JOptionPane.CANCEL_OPTION);
-//					} else
-//						JOptionPane.showMessageDialog(null, "INICIO DE SECION ERRONEO", "Fallido",
-//								JOptionPane.CANCEL_OPTION);
-//				} else
-//					JOptionPane.showMessageDialog(null, "INICIO DE SECION ERRONEO", "Fallido",
-//							JOptionPane.CANCEL_OPTION);
-
 			}
-		});
-		registro.add(botonAcceder);
 
-		JButton irLogin = new JButton("Ir a login");
-		irLogin.setFont(new Font("Bahnschrift", Font.BOLD, 15));
-		irLogin.setBounds(350, 21, 120, 40);
+			// confirmamos que no quede en defaul
+			if (sector.equals("Seleccione una opción")) {
 
-		irLogin.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-//				router("login");
+				sectorCombo.setBorder(BorderFactory.createLineBorder(Color.red, 4));
+				JOptionPane.showMessageDialog(null, "NINGUN ESPACION PUEDE QUEDAR VACIO", "Fallido",
+						JOptionPane.CANCEL_OPTION);
+				return;
+			} else {
+				sectorCombo.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
 			}
+
+			// confirmamos que la contraseña sea igual
+			if (!password.equals(confirmPassword)) {
+				passwordField.setBorder(BorderFactory.createLineBorder(Color.red, 4));
+				confirmPasswordField.setBorder(BorderFactory.createLineBorder(Color.red, 4));
+
+				JOptionPane.showMessageDialog(null, "LAS CONTRASEÑAS NO COINCIDEN", "Fallido",
+						JOptionPane.CANCEL_OPTION);
+				return;
+			} else {
+				passwordField.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+			}
+
+			// despues de todas las confirmaciones ya entregamos la informacion
+			AuthModel model = new AuthModel();
+			model.register(name, lastName, email, password, company, sector);
+
+			// damos mensaje de inicio de secio
+			JOptionPane.showMessageDialog(null, "Registro exitoso", "Confirmamos", JOptionPane.DEFAULT_OPTION);
+
+			// cerramos el registro y abrimos login
+			registerFrame.dispose();
+			login();
+
 		});
-		registro.add(irLogin);
+		registerPanel.add(registerButton);
 
-		JLabel lblIngreseLaEmpresa = new JLabel("Ingrese la empresa:");
-		lblIngreseLaEmpresa.setFont(new Font("Bahnschrift", Font.BOLD, 15));
-		lblIngreseLaEmpresa.setBounds(140, 226, 200, 40);
-		registro.add(lblIngreseLaEmpresa);
+		registerFrame.add(registerPanel);
+		registerFrame.setVisible(true);
 
-		JLabel lblIngreseLaEmpresa_1 = new JLabel("Ingrese la empresa:");
-		lblIngreseLaEmpresa_1.setFont(new Font("Bahnschrift", Font.BOLD, 15));
-		lblIngreseLaEmpresa_1.setBounds(140, 323, 200, 40);
-		registro.add(lblIngreseLaEmpresa_1);
-
-		JComboBox<String> comboBox = new JComboBox<>();
-		comboBox.setBounds(140, 360, 200, 25); // Ajusté el tamaño para mejor visualización
-		comboBox.setFont(new Font("Bahnschrift", Font.PLAIN, 12));
-
-		// Agregar opciones al JComboBox
-		comboBox.addItem("Seleccione una opción"); // Opción por defecto
-		comboBox.addItem("Tecnología");
-		comboBox.addItem("Salud");
-		comboBox.addItem("Educación");
-		comboBox.addItem("Comercio");
-		comboBox.addItem("Otro");
-
-		registro.add(comboBox);
-
-		setContentPane(registro);
-
-		JLabel lblIngreseLaContrasea = new JLabel("Ingrese la contraseña:");
-		lblIngreseLaContrasea.setFont(new Font("Bahnschrift", Font.BOLD, 15));
-		lblIngreseLaContrasea.setBounds(140, 395, 200, 40);
-		registro.add(lblIngreseLaContrasea);
-
-		JPasswordField passwordField_1 = new JPasswordField();
-		passwordField_1.setFont(new Font("Bahnschrift", Font.PLAIN, 15));
-		passwordField_1.setBounds(116, 436, 242, 40);
-		registro.add(passwordField_1);
-
-		JLabel lblRepitaLaConrasea = new JLabel("Repita la contraseña:");
-		lblRepitaLaConrasea.setFont(new Font("Bahnschrift", Font.BOLD, 15));
-		lblRepitaLaConrasea.setBounds(140, 486, 200, 40);
-		registro.add(lblRepitaLaConrasea);
-
-		JPasswordField passwordField_2 = new JPasswordField();
-		passwordField_2.setFont(new Font("Bahnschrift", Font.PLAIN, 15));
-		passwordField_2.setBounds(116, 525, 242, 40);
-		registro.add(passwordField_2);
-
-		JLabel lblIngreseSuCorreo = new JLabel("Ingrese su correo:");
-		lblIngreseSuCorreo.setFont(new Font("Bahnschrift", Font.BOLD, 15));
-		lblIngreseSuCorreo.setBounds(140, 567, 200, 40);
-		registro.add(lblIngreseSuCorreo);
-
-		JTextField textField = new JTextField();
-		textField.setFont(new Font("Bahnschrift", Font.BOLD, 15));
-		textField.setBounds(109, 187, 249, 40);
-		registro.add(textField);
-
-		JTextField textField_1 = new JTextField();
-		textField_1.setFont(new Font("Bahnschrift", Font.BOLD, 15));
-		textField_1.setBounds(109, 262, 249, 40);
-		registro.add(textField_1);
-
-		JTextField textField_2 = new JTextField();
-		textField_2.setFont(new Font("Bahnschrift", Font.BOLD, 15));
-		textField_2.setBounds(109, 610, 249, 40);
-		registro.add(textField_2);
-
-		frame.add(registro);
-		frame.setVisible(true);
 	}
 
 	private void setContentPane(JPanel registro) {
 		// TODO Auto-generated method stub
-
 	}
 
 	public void forgot() {
