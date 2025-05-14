@@ -66,14 +66,13 @@ public class HomeView {
 				
 				UsersController uc = new UsersController();
 				uc.index();
-				
+
 				//e.getSource().
 				 
 				
 			}});
 		panel.add(btnNewButton2);
-		
-		 
+			
 		
 		ventana.add(panel);
 		ventana.repaint();

@@ -4,7 +4,7 @@ import java.sql.Date;
 
 public class User {
 	
-	private int id;
+	public int id;
 	public String name;
 	private String email;
 	private String role;
