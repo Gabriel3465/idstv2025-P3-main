@@ -1,2 +1,3 @@
+Maria,Garcia,a,a,Salud
 Juan,Perez,perez@empresa,12345,Tecnología
 Maria,Garcia,maria@correo,45678,Salud

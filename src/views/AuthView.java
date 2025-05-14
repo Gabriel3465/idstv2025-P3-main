@@ -29,6 +29,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
 
 import controllers.AuthController;
+import controllers.HomeController;
 import models.AuthModel;
 
 public class AuthView {
@@ -139,6 +140,11 @@ public class AuthView {
 					if (isLogin) {
 						JOptionPane.showMessageDialog(null, "Inicio de secion exitoso", "Hello",
 								JOptionPane.DEFAULT_OPTION);
+						
+						frame.dispose();
+						HomeController hc = new HomeController();
+						
+						hc.home();
 					} else {
 						email.setBorder(BorderFactory.createLineBorder(Color.red, 4));
 						password.setBorder(BorderFactory.createLineBorder(Color.red, 4));

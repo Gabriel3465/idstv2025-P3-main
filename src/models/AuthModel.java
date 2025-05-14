@@ -12,9 +12,6 @@ import java.nio.file.StandardOpenOption;
 
 public class AuthModel {
 
-	private static final String FILE_NAME = "usuarios.txt";
-	private Path filePath;
-
 	public AuthModel() {
 
 	}
