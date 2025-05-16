@@ -31,6 +31,7 @@ import javax.swing.border.LineBorder;
 import controllers.AuthController;
 import controllers.HomeController;
 import models.AuthModel;
+import models.UsersModel;
 
 public class AuthView {
 
@@ -368,7 +369,11 @@ public class AuthView {
 			// despues de todas las confirmaciones ya entregamos la informacion
 			AuthModel model = new AuthModel();
 			model.register(name, lastName, email, password, company, sector);
-
+			
+//			c name, email, role, phone
+			UsersModel model2= new UsersModel();
+			model2.add(name, email, sector, company);
+			
 			// damos mensaje de inicio de secio
 			JOptionPane.showMessageDialog(null, "Registro exitoso", "Confirmamos", JOptionPane.DEFAULT_OPTION);
 

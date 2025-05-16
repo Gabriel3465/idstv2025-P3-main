@@ -6,9 +6,9 @@ public class User {
 	
 	public int id;
 	public String name;
-	private String email;
-	private String role;
-	private String phone;
+	public String email;
+	public String role;
+	public String phone;
 	private Date create_at;
 	private Date update_at;
 	

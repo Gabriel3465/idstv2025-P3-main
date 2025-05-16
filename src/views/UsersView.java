@@ -68,7 +68,7 @@ public class UsersView {
 //		}
 
 		// Crear unan tabla
-		String[] columnNames = { "ID", "Nombre" };
+		String[] columnNames = { "ID", "Nombre", "email", "Role", "Phone" };
 		DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -79,7 +79,9 @@ public class UsersView {
 		// Llenar la tabla con datos
 		for (Iterator iterator = usuarios.iterator(); iterator.hasNext();) {
 			User usuario = (User) iterator.next();
-			Object[] rowData = { usuario.getId(), usuario.getName() };
+			Object[] rowData = { usuario.getId(), 
+					usuario.getName(), usuario.getEmail(), usuario.getRole(), usuario.getPhone()
+					};
 			model.addRow(rowData);
 		}
 
