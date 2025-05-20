@@ -26,5 +26,15 @@ public class UsersController {
 		vista.index(usuarios);
 		
 	}
+	
+	public void update(int id) {
+		
+		UsersModel um = new UsersModel();
+
+		User myUser = um.get(id);
+		
+		vista.editarUsuario(myUser);
+		
+	}
 
 }

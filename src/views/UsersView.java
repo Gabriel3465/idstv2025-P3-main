@@ -7,15 +7,19 @@ import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+//import controller.UserController;
 import controllers.UsersController;
 import models.User;
 import models.UsersModel;
@@ -49,23 +53,6 @@ public class UsersView {
 		lblNewLabel.setBounds(107, 35, 210, 26);
 		lblNewLabel.setHorizontalAlignment(JLabel.CENTER);
 		panel.add(lblNewLabel);
-
-//		String[] columnNames = {"Nombre", "Email", "Rol", "Teléfono"};
-//		DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-//		
-//		int x = 100;
-//		for (Iterator iterator = usuarios.iterator(); iterator.hasNext();) {
-//			User usuario = (User) iterator.next();
-//			
-//			JLabel user = new JLabel(usuario.name);
-//			user.setForeground(new Color(0, 0, 0)); 
-//			user.setBounds(50, x, 210, 26);
-//			user.setHorizontalAlignment(JLabel.CENTER);
-//			panel.add(user);
-//			
-//			x+= 35;
-//			
-//		}
 
 		// Crear unan tabla
 		String[] columnNames = { "ID", "Nombre", "email", "Role", "Phone" };
@@ -136,9 +123,154 @@ public class UsersView {
 			}
 		});
 		panel.add(btnEliminar);
+		
+		JButton update = new JButton("actualizar");
+		update.setBounds(630, 520, 250, 30);
+		update.addActionListener(e -> {
+			
+		    int selectedRow = table.getSelectedRow();
+
+		    int userId = (int) model.getValueAt(selectedRow, 0);
+		    String name = (String) model.getValueAt(selectedRow, 1);
+		    String email = (String) model.getValueAt(selectedRow, 2);
+		    String role = (String) model.getValueAt(selectedRow, 3);
+		    String phone = (String) model.getValueAt(selectedRow, 4);
+			
+//			UsersController uc = new UsersController();
+		    
+		    UsersController uc = new UsersController();
+			uc.update(userId);
+		    
+//	        ventana.dispose(); 
+//		    editarUsuario(userId, name, email, role, phone);
+		    
+		});;
+		panel.add(update);
 
 		ventana.add(panel);
 		ventana.repaint();
 		ventana.revalidate();
+	}
+	
+	public void editarUsuario(User user) {
+	    JFrame editFrame = new JFrame("Editar Usuario");
+	    editFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Cambiado a DISPOSE_ON_CLOSE
+	    editFrame.setSize(500, 800);
+	    editFrame.setLocationRelativeTo(null);
+
+	    JPanel editPanel = new JPanel();
+	    editPanel.setBackground(Color.decode("#DCC8A0"));
+	    editPanel.setLayout(null);
+
+	    // texto
+	    JLabel titleLabel = new JLabel("Editar Usuario"); // Cambiado el título
+	    titleLabel.setFont(new Font("Bahnschrift", Font.BOLD, 20));
+	    titleLabel.setBounds(140, 20, 200, 40);
+	    titleLabel.setHorizontalAlignment(JLabel.CENTER);
+	    editPanel.add(titleLabel);
+
+	    // Campo Nombre (precargado)
+	    JLabel nameLabel = new JLabel("Nombre completo:");
+	    nameLabel.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+	    nameLabel.setBounds(140, 79, 200, 40);
+	    editPanel.add(nameLabel);
+
+	    JTextField nameField = new JTextField(user.name); // Precargamos el nombre
+	    nameField.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+	    nameField.setBounds(109, 113, 249, 40);
+	    editPanel.add(nameField);
+
+	    // Campo Teléfono (precargado)
+	    JLabel phoneLabel = new JLabel("Teléfono:"); // Cambiado el texto
+	    phoneLabel.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+	    phoneLabel.setBounds(140, 226, 200, 40);
+	    editPanel.add(phoneLabel);
+
+	    JTextField phoneField = new JTextField(user.phone); // Precargamos el teléfono
+	    phoneField.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+	    phoneField.setBounds(109, 262, 249, 40);
+	    editPanel.add(phoneField);
+
+	    // Combo Rol (precargado)
+	    JLabel roleLabel = new JLabel("Rol:"); // Cambiado el texto
+	    roleLabel.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+	    roleLabel.setBounds(140, 323, 200, 40);
+	    editPanel.add(roleLabel);
+
+	    JComboBox<String> roleCombo = new JComboBox<>();
+	    roleCombo.setBounds(140, 360, 200, 25);
+	    roleCombo.setFont(new Font("Bahnschrift", Font.PLAIN, 12));
+	    roleCombo.addItem("Tecnología");
+	    roleCombo.addItem("Salud");
+	    roleCombo.addItem("Educación");
+	    roleCombo.addItem("Comercio");
+	    roleCombo.addItem("Otro");
+	    
+	    // Seleccionamos el rol actual
+	    for (int i = 0; i < roleCombo.getItemCount(); i++) {
+	        if (roleCombo.getItemAt(i).equals(user.role)) {
+	            roleCombo.setSelectedIndex(i);
+	            break;
+	        }
+	    }
+	    editPanel.add(roleCombo);
+
+	    // Campo Email (precargado)
+	    JLabel emailLabel = new JLabel("Correo electrónico:");
+	    emailLabel.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+	    emailLabel.setBounds(140, 567, 200, 40);
+	    editPanel.add(emailLabel);
+
+	    JTextField emailField = new JTextField(user.getEmail()); // Precargamos el email
+	    emailField.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+	    emailField.setBounds(109, 610, 249, 40);
+	    editPanel.add(emailField);
+
+	    // Botón Guardar Cambios (en lugar de Registrar)
+	    JButton saveButton = new JButton("Guardar Cambios");
+	    saveButton.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+	    saveButton.setBounds(185, 689, 120, 40);
+	    saveButton.addActionListener(e -> {
+	        // Validación de campos
+
+	        String name = nameField.getText();
+	        String email1 = emailField.getText();
+	        String phone = phoneField.getText();
+	        String role = (String) roleCombo.getSelectedItem();
+
+	        JTextField[] fields = { nameField, phoneField, emailField };
+
+	        for (int i = 0; i < fields.length; i++) {
+	            if (fields[i].getText().isEmpty()) {
+	                fields[i].setBorder(BorderFactory.createLineBorder(Color.red, 4));
+	                JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios", "Error",
+	                        JOptionPane.ERROR_MESSAGE);
+	                return;
+	            } else {
+	                fields[i].setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+	            }
+	        }
+
+	        // Actualizar el usuario en la base de datos
+	        UsersModel model = new UsersModel();
+	        boolean actualizado = model.update(user.id, name, email1, role, phone);
+	        
+	        if (actualizado) {
+	            JOptionPane.showMessageDialog(null, "Usuario actualizado correctamente", "Éxito",
+	                    JOptionPane.INFORMATION_MESSAGE);
+	            editFrame.dispose();
+	            
+				UsersController uc = new UsersController();
+	            uc.index();
+	            
+	        } else {
+	            JOptionPane.showMessageDialog(null, "Error al actualizar el usuario", "Error",
+	                    JOptionPane.ERROR_MESSAGE);
+	        }
+	    });
+	    editPanel.add(saveButton);
+
+	    editFrame.add(editPanel);
+	    editFrame.setVisible(true);
 	}
 }

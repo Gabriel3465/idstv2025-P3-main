@@ -191,7 +191,7 @@ public class AuthView {
 			public void actionPerformed(ActionEvent e) {
 
 				frame.dispose();
-				register();
+				registroUsuario();
 			}
 		});
 
@@ -243,7 +243,7 @@ public class AuthView {
 		lastNameField.setBounds(109, 187, 249, 40);
 		registerPanel.add(lastNameField);
 
-		JLabel companyLabel = new JLabel("Ingrese la empresa:");
+		JLabel companyLabel = new JLabel("Ingrese su numero:");
 		companyLabel.setFont(new Font("Bahnschrift", Font.BOLD, 15));
 		companyLabel.setBounds(140, 226, 200, 40);
 		registerPanel.add(companyLabel);
@@ -370,7 +370,7 @@ public class AuthView {
 			AuthModel model = new AuthModel();
 			model.register(name, lastName, email, password, company, sector);
 			
-//			c name, email, role, phone
+//			name, email, role, phone
 			UsersModel model2= new UsersModel();
 			model2.add(name, email, sector, company);
 			
@@ -389,6 +389,142 @@ public class AuthView {
 
 	}
 
+	public void registroUsuario() {
+		JFrame registerFrame = new JFrame("Registro");
+		registerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		registerFrame.setSize(500, 800);
+		registerFrame.setLocationRelativeTo(null);
+
+		JPanel registerPanel = new JPanel();
+		registerPanel.setBackground(Color.decode("#DCC8A0"));
+		registerPanel.setLayout(null);
+
+		// texto
+		JLabel titleLabel = new JLabel("Registro");
+		titleLabel.setFont(new Font("Bahnschrift", Font.BOLD, 20));
+		titleLabel.setBounds(140, 20, 200, 40);
+		titleLabel.setHorizontalAlignment(JLabel.CENTER);
+		registerPanel.add(titleLabel);
+
+		JLabel nameLabel = new JLabel("Ingrese su nombre completo:");
+		nameLabel.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		nameLabel.setBounds(140, 79, 200, 40);
+		registerPanel.add(nameLabel);
+
+		JTextField nameField = new JTextField();
+		nameField.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		nameField.setBounds(109, 113, 249, 40);
+		registerPanel.add(nameField);
+
+
+		JLabel companyLabel = new JLabel("Ingrese su numero:");
+		companyLabel.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		companyLabel.setBounds(140, 226, 200, 40);
+		registerPanel.add(companyLabel);
+
+		JTextField companyField = new JTextField();
+		companyField.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		companyField.setBounds(109, 262, 249, 40);
+		registerPanel.add(companyField);
+
+		JLabel sectorLabel = new JLabel("Seleccione el sector:");
+		sectorLabel.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		sectorLabel.setBounds(140, 323, 200, 40);
+		registerPanel.add(sectorLabel);
+
+		JComboBox<String> sectorCombo = new JComboBox<>();
+		sectorCombo.setBounds(140, 360, 200, 25);
+		sectorCombo.setFont(new Font("Bahnschrift", Font.PLAIN, 12));
+		sectorCombo.addItem("Seleccione una opción");
+		sectorCombo.addItem("Tecnología");
+		sectorCombo.addItem("Salud");
+		sectorCombo.addItem("Educación");
+		sectorCombo.addItem("Comercio");
+		sectorCombo.addItem("Otro");
+		registerPanel.add(sectorCombo);
+
+
+		JLabel emailLabel = new JLabel("Ingrese su correo:");
+		emailLabel.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		emailLabel.setBounds(140, 567, 200, 40);
+		registerPanel.add(emailLabel);
+
+		JTextField emailField = new JTextField();
+		emailField.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		emailField.setBounds(109, 610, 249, 40);
+		registerPanel.add(emailField);
+
+		// Botones
+		JButton backButton = new JButton("Volver");
+		backButton.setBounds(20, 20, 75, 40);
+		backButton.setFont(new Font("Bahnschrift", Font.BOLD, 10));
+		backButton.addActionListener(e -> {
+			registerFrame.dispose();
+			login();
+		});
+		registerPanel.add(backButton);
+
+		JButton registerButton = new JButton("Registrar");
+		registerButton.setFont(new Font("Bahnschrift", Font.BOLD, 15));
+		registerButton.setBounds(185, 689, 120, 40);
+		registerButton.addActionListener(e -> {
+
+			// pasamos todos los field a string
+			String name = nameField.getText();
+			String email = emailField.getText();
+			String company = companyField.getText();
+			String sector = (String) sectorCombo.getSelectedItem();
+
+			// creamos un array con todos los field
+			JTextField[] fields = { nameField, companyField,
+					emailField };
+
+			// repasamos todos los field y confirmamos que seleccione una copcion
+			for (int i = 0; i < fields.length; i++) {
+
+				// confirmamos que no este nada vacio
+				if (fields[i].getText().isEmpty()) {
+					fields[i].setBorder(BorderFactory.createLineBorder(Color.red, 4));
+					JOptionPane.showMessageDialog(null, "NINGUN ESPACION PUEDE QUEDAR VACIO", "Fallido",
+							JOptionPane.CANCEL_OPTION);
+					return;
+				} else {
+					// restablesemos los bordes a defaul
+					fields[i].setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+				}
+
+			}
+
+			// confirmamos que no quede en defaul
+			if (sector.equals("Seleccione una opción")) {
+
+				sectorCombo.setBorder(BorderFactory.createLineBorder(Color.red, 4));
+				JOptionPane.showMessageDialog(null, "NINGUN ESPACION PUEDE QUEDAR VACIO", "Fallido",
+						JOptionPane.CANCEL_OPTION);
+				return;
+			} else {
+				sectorCombo.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+			}
+			
+//			name, email, role, phone
+			UsersModel model2= new UsersModel();
+			model2.add(name, email, sector, company);
+			
+			// damos mensaje de inicio de secio
+			JOptionPane.showMessageDialog(null, "Registro exitoso", "Confirmamos", JOptionPane.DEFAULT_OPTION);
+
+			// cerramos el registro y abrimos login
+			registerFrame.dispose();
+			login();
+
+		});
+		registerPanel.add(registerButton);
+
+		registerFrame.add(registerPanel);
+		registerFrame.setVisible(true);
+
+	}
+	
 	private void setContentPane(JPanel registro) {
 		// TODO Auto-generated method stub
 	}
